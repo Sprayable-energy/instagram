@@ -1,0 +1,102 @@
+!!! html
+%html{:lang => 'en'}
+  %head
+    %meta{:charset => 'utf8'}
+    %title Bootstrap, from Twitter
+    %meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1.0'}
+    %meta{:name => 'description', :content => ''}
+    %meta{:name => 'author', :content => 'Simon Wilkins <si.wilkins@sheffield.ac.uk'}
+    %link{:href => 'css/bootstrap.css', :rel => 'stylesheet'}
+    :css
+      body {
+        padding-top: 60px /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    %link{:href => 'css/bootstrap-responsive.css', :rel => 'stylesheet'}
+    %link{:rel => 'shortcut icon', :href => '../assets/ico/favicon.ico'}
+    %link{:rel => 'apple-touch-icon-precomposed', :sizes => '144x144', :href => '../assets/ico/apple-touch-icon-144-precomoposed.png'}
+    %link{:rel => 'apple-touch-icon-precomposed', :sizes => '114x114', :href => '../assets/ico/apple-touch-icon-114-precomoposed.png'}
+    %link{:rel => 'apple-touch-icon-precomposed', :sizes => '72x72', :href => '../assets/ico/apple-touch-icon-72-precomoposed.png'}
+    %link{:rel => 'apple-touch-icon-precomposed', :href => '../assets/ico/apple-touch-icon-57-precomposed.png'}
+  %body
+
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container
+          %a.btn.btn-navbar
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.brand{:href => '/'} Instagram Web App
+          .nav-collapse
+            %ul.nav
+              %li
+                %a{:href => '/home'} Home
+              %li.active
+                %a{:href => '/ironworker'} Ironworker
+              %li
+                %a{:href => '/tags'} Tag Search
+       
+    .container
+      %h1 Ironworker Dashboard
+      %br
+        %h2 If you want to schedule a new task, CANCEL THE INCUMBENT SCHEDULE FIRST!!!
+        %br
+        %h3 List of Currently Running Schedules
+        %br
+          %table
+            %tr
+              %td= "Project Schedule Name"
+              %td= "Schedule Id"
+              %td= "Max Run Count"
+              %td= "Current Run Count"
+              %td= "Running Every"
+              %td= "Next Start Time"
+              %td= "Status"
+            - @list.each do |schedule|
+              %tr
+                %td= "#{schedule['code_name']}"
+                %td= "#{schedule['id']}"
+                %td= "#{schedule['run_times']}"
+                %td= "#{schedule['run_count']}"
+                %td= "#{schedule['run_every']}"
+                %td= "#{schedule['next_start']}"
+                %td= "#{schedule['status']}"
+        %h3 Cancel a Scheduled Task
+        %br
+          %p Select the schedule you would like to cancel and hit "Cancel"
+          %br
+          %form{ :action => "/cancel", :method => "POST"}
+            %select{ :name => "cancel_id"}
+              - @list.each do |schedule|
+                %option{:name => "cancel", :value => "#{schedule['id']}"} Cancel #{schedule['code_name']}
+            %br
+            %br
+            %input{:type => "submit", :value => "Cancel", :class => "button"}
+        %h3 Schedule a New Task
+        %br
+          %p Enter the following parameters to schedule a new Follow/Unfollow task
+          %br
+          %form{ :action => "/schedule", :method => "POST"}
+            %p Time Lag
+            %select{ :name => "timelag"}
+              %option{ :value => "0"} Now
+              %option{ :value => "3600"} 1 Hour
+              %option{ :value => "43200"} 12 Hours
+              %option{ :value => "86400"} Tomorrow
+            %br
+            %p Runs Every
+            %select{ :name => "run_every"}
+              %option{ :value => "43200"} 12 Hours
+              %option{ :value => "86400"} 1 Day
+              %option{ :value => "129600"} 1.5 Days
+            %br
+            %p Max Times Run
+            %select{ :name => "run_times"}
+              %option{ :value => "7"} 7 times
+              %option{ :value => "10"} 10 times
+              %option{ :value => "30"} 30 times
+              %option{ :value => "60"} 60 times
+            %br
+            %br  
+            %input{:type => "submit", :value => "Schedule", :class => "button"}
+	

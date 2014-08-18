@@ -1,0 +1,10 @@
+# define the runtime language, this can be ruby, java, node, php, go, etc.
+runtime "ruby"
+
+# exec is the file that will be executed:
+exec "iron_schedule.rb"
+
+#full_remote_build true
+remote
+
+gem 'iron_worker_ng', "1.5.0"
